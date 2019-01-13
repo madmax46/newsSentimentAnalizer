@@ -14,7 +14,8 @@ namespace EasyWayToAddTssTerms
         List<TssTerm> allTerms = new List<TssTerm>();
         List<TssInstrument> allInstruments = new List<TssInstrument>();
         List<TssAffectingFactor> allAffectingFactors = new List<TssAffectingFactor>();
-
+        DataTable fullInfoByTerms = new DataTable();
+        int findedFullInfoByTermsIndex = -1;
         public MainModel()
         {
             MySQLConfig config = new MySQLConfig()
@@ -67,10 +68,66 @@ namespace EasyWayToAddTssTerms
             return retTerm;
         }
 
+        public int FindIdRowTermContainsSubstingInAllInfo(string substing, bool isFindNext = false)
+        {
+            int lastFindedIndex = findedFullInfoByTermsIndex;
+
+            findedFullInfoByTermsIndex = -1;
+
+            if (fullInfoByTerms == null || fullInfoByTerms.Rows.Count == 0 || !fullInfoByTerms.Columns.Contains("term"))
+                return findedFullInfoByTermsIndex;
+
+            int index = 0;
+            List<int> idxFinded = new List<int>();
+            foreach (DataRow oneInfo in fullInfoByTerms.Rows)
+            {
+                var termText = Convert.ToString(oneInfo["term"]);
+                var tempIndex = termText.IndexOf(substing, StringComparison.CurrentCultureIgnoreCase);
+                if (tempIndex != -1)
+                {
+                    idxFinded.Add(index);
+                }
+                index++;
+            }
+
+            if (!idxFinded.Any())
+                return findedFullInfoByTermsIndex;
+
+            if (isFindNext == false || idxFinded.Max() == lastFindedIndex)
+                return findedFullInfoByTermsIndex = idxFinded.First();
+
+            foreach (int oneIndex in idxFinded)
+            {
+                if (oneIndex > lastFindedIndex)
+                {
+                    findedFullInfoByTermsIndex = oneIndex;
+                    break;
+                }
+            }
+
+            return findedFullInfoByTermsIndex;
+        }
+
+
+        public DataTable ShowFullInfoByTerms()
+        {
+            try
+            {
+                var res = dBProvider.ProcedureByName("ShowFullInfoByTerms");
+                fullInfoByTerms = res;
+            }
+            catch (Exception ex)
+            {
+                fullInfoByTerms = new DataTable();
+            }
+            return fullInfoByTerms;
+        }
+
 
 
         public List<TssInstrument> LoadAllInstruments()
         {
+
             string query = "SELECT id,name FROM stockthesaurus.tss_instruments";
             var dt = GetDataTableByQuery(query);
 

@@ -70,6 +70,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AffectingFactor.cs" />
+    <Compile Include="SummaryRelationsInfo.cs" />
     <Compile Include="TssInstrument.cs" />
     <Compile Include="TssTerm.cs" />
     <Page Include="MainWindow.xaml">

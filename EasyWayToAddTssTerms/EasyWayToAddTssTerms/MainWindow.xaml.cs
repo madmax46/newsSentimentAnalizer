@@ -55,9 +55,11 @@ namespace EasyWayToAddTssTerms
         private void LoadAllTerms()
         {
             var terms = model.LoadAllTerms();
+            var summaryRelationsInfo = model.ShowFullInfoByTerms();
             Dispatcher.Invoke(() =>
             {
                 UIAllTerms.ItemsSource = terms;
+                UIAllRelations.DataContext = summaryRelationsInfo;
             });
         }
 
@@ -93,7 +95,6 @@ namespace EasyWayToAddTssTerms
             if (selFactor == null)
                 return;
 
-
             var res = model.AddNewTerm(selInstrument, selFactor, termTex);
 
             if (res == false)
@@ -106,6 +107,45 @@ namespace EasyWayToAddTssTerms
         {
             string ip = UIIp.Text;
             model.ChangeBaseIp(ip);
+        }
+
+        private void UITermFindText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox senderBox = (TextBox)sender;
+            if (string.IsNullOrEmpty(senderBox.Text))
+                return;
+
+            FindBetweenAllTermsRelations(senderBox.Text, false);
+        }
+
+        private void FindBetweenAllTermsRelations(string substring, bool isNextFind)
+        {
+            var finded = model.FindIdRowTermContainsSubstingInAllInfo(substring, isNextFind);
+
+            if (finded == -1)
+                return;
+
+            UIAllRelations.SelectedIndex = finded;
+            UIAllRelations.ScrollIntoView(UIAllRelations.SelectedItem);
+        }
+
+
+        private void UIFindNextAllTerms_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox senderBox = UITermFindText;
+            if (string.IsNullOrEmpty(senderBox.Text))
+                return;
+
+            FindBetweenAllTermsRelations(senderBox.Text, true);
+        }
+
+        private void UIUpdateAll_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                LoadAllTerms();
+                LoadComboBoxes();
+            });
         }
     }
 }
