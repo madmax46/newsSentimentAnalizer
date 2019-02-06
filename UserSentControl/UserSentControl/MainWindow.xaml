@@ -1,0 +1,108 @@
+﻿<Window x:Class="UserSentControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UserSentControl"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TabControl x:Name="UITabControl">
+            <TabItem Header="Список новостей" IsSelected="True">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="5,5,10,5" Grid.Row="0" Orientation="Horizontal" >
+                        <Button x:Name="UIFindNews" Content="Обновить" Width="100" Click="UIFindNews_Click"/>
+                        <TextBlock TextWrapping="Wrap" Text="Offset:" Margin="20,0,0,0"  Height="20"  Width="41"/>
+                        <TextBox x:Name="UIOffset" TextWrapping="Wrap" Text="100" Margin="10,0" Height="20" Width="65"/>
+                        <TextBlock TextWrapping="Wrap" Text="Лимит:" Margin="20,0,0,0"  Height="20"  Width="41"/>
+                        <TextBox x:Name="UILimitNews" TextWrapping="Wrap" Text="100" Margin="10,0" Height="20" Width="65"/>
+                        <TextBlock TextWrapping="Wrap" Text="Id Новости:" Margin="20,0,0,0"  Height="20"  Width="72"/>
+                        <TextBox x:Name="UINewsId" TextWrapping="Wrap" Text="" Margin="10,0" Height="20" Width="65"/>
+
+                    </StackPanel>
+
+                    <DataGrid x:Name="UINewsList" Margin="5,10,5,0" ItemsSource="{Binding}" AutoGenerateColumns="False"  IsReadOnly="True" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding NewsDate}"/>
+                            <DataGridTextColumn Header="Заголовок" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Подзаголовок" Binding="{Binding SubTitle}"/>
+                            <DataGridTextColumn Header="Link" Binding="{Binding Link}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ItemContainerStyle>
+                            <Style TargetType="DataGridRow">
+                                <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                            </Style>
+                        </DataGrid.ItemContainerStyle>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Обзор новостей" >
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="272*"/>
+                        <ColumnDefinition Width="121*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="29"/>
+                            <RowDefinition Height="56"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="UINewsDate"  Margin="10,5,0,0" TextWrapping="Wrap" Text="Date" Grid.Row="0" VerticalAlignment="Top"  DataContext="{Binding NewsDate}" HorizontalAlignment="Left" Width="202" />
+                        <TextBlock  Margin="0,5,59,0" TextWrapping="Wrap" Text="Найдено термов:" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="101" />
+
+                        <TextBlock x:Name="UIFindedCount"  Margin="0,5,0,0" TextWrapping="Wrap" Text="0" Grid.Row="0" VerticalAlignment="Top"   HorizontalAlignment="Right" Width="54" />
+
+
+                        <StackPanel HorizontalAlignment="Left" Height="56" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" Width="544">
+                            <TextBlock x:Name="UITitle"  Margin="10,5,0,0" TextWrapping="Wrap" Text="Title" Grid.Row="0" FontSize="17" VerticalAlignment="Top" DataContext="{Binding Title}" />
+                            <TextBlock x:Name="UISubTitle"  Margin="10,5,0,0" TextWrapping="Wrap"  Grid.Row="0" VerticalAlignment="Top"  DataContext="{Binding SubTitle}"/>
+                        </StackPanel>
+                        <RichTextBox Name="UIFullNewsText" Grid.Row="2" Margin="10,10" IsReadOnly="True" FontSize="15" VerticalScrollBarVisibility="Visible" DataContext="{Binding FullText}" ></RichTextBox>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="UIUpdateNewsButton" Grid.Row="0"  Content="Обновить" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="106" Height="33" Click="UIUpdateNewsButton_Click"/>
+                        <Button x:Name="UINewsLink" Grid.Row="0" HorizontalAlignment="Left"  VerticalAlignment="Top"  Content="Открыть в браузере" Height="33" Width="114" Margin="123,0,0,0"  Click="UINewsLink_Click" />
+                        <DataGrid x:Name="UIEvaluation" Margin="5,10,5,0" Grid.Row="1" ItemsSource="{Binding}" AutoGenerateColumns="False"  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Результат оценки" Binding="{Binding ResEval}"/>
+                                <DataGridTextColumn Header="Позитив" Binding="{Binding PositiveValue}"/>
+                                <DataGridTextColumn Header="Негатив" Binding="{Binding NegativeValue}"/>
+                                <DataGridTextColumn Header="Нейтрально" Binding="{Binding NeutralValue}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+
+                        <GroupBox Header="Найденные в словаре термы" Grid.Row="2" RenderTransformOrigin="0.5,0.5" >
+                            <DataGrid x:Name="UIFindedTermsGrid" Margin="0,10,0,0" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Вес" Binding="{Binding Score}"/>
+                                    <DataGridTextColumn Header="Терм" Binding="{Binding Term}"/>
+                                    <DataGridTextColumn Header="Лемма" Binding="{Binding TermLemma}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </GroupBox>
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Настройки">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
