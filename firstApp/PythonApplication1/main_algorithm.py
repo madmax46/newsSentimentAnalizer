@@ -12,11 +12,11 @@ morph = pymorphy2.MorphAnalyzer()
 
 
 
-mydb = mysql.connector.connect(user='root', password='28Q{f6NA!r',
+mydb = mysql.connector.connect(user='root', password='****',
                               host='localhost',
                               database='stockthesaurus')
 
-mydbNewsParsers = mysql.connector.connect(user='root', password='28Q{f6NA!r',
+mydbNewsParsers = mysql.connector.connect(user='root', password='****',
                               host='localhost',
                               database='newsparsers')
 
