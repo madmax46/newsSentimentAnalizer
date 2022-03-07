@@ -22,14 +22,10 @@ namespace UserSentControl
                         {
                             MySQLConfig config = new MySQLConfig()
                             {
-                                //Host = "94.75.155.92",
-                                //Host = "84.42.74.99",
                                 Host = "localhost",
                                 Port = 3306,
                                 UserId = "root",
-                                Password = "28Q{f6NA!r",
                                 SslMode = "none",
-                                //Database = "newsparsers",
                                 CharacterSet = "cp1251"
                             };
                             myWrap = new MySQLWrap(config);
@@ -55,13 +51,6 @@ namespace UserSentControl
                         {
                             MySQLConfig config = new MySQLConfig()
                             {
-                                Host = "s3.kts.tu-bryansk.ru",
-                                Port = 3306,
-                                UserId = "StockQuotes.root",
-                                Password = "28Q{f6NA!r",
-                                SslMode = "none",
-                                Database = "StockQuotes",
-                                CharacterSet = "cp1251"
                             };
                             myWrapUniver = new MySQLWrap(config);
                         }
