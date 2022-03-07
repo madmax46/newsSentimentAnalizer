@@ -22,11 +22,11 @@ sent = Sentimental()
 limitNews = 10
 minCountEntries = 5
 
-tss_db = mysql.connector.connect(user='root', password='28Q{f6NA!r',
+tss_db = mysql.connector.connect(user='root', password='******',
                               host='localhost',
                               database='stockthesaurus')
 
-mydbNewsParsers = mysql.connector.connect(user='root', password='28Q{f6NA!r',
+mydbNewsParsers = mysql.connector.connect(user='root', password='*******',
                               host='localhost',
                               database='newsparsers')
 
