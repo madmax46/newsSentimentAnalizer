@@ -21,9 +21,7 @@ namespace EasyWayToAddTssTerms
             MySQLConfig config = new MySQLConfig()
             {
                 Host = "localhost",
-                Port = 3306,
                 UserId = "root",
-                Password = "28Q{f6NA!r",
                 SslMode = "none",
                 Database = "stockthesaurus",
                 CharacterSet = "cp1251"
